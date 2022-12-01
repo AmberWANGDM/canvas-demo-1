@@ -4,8 +4,7 @@
   box-sizing: border-box;
 }
 
-#canvas {
-  /* width: 100vw;
-  height: 100vh; */
-  /* border: 1px solid red; */
+/* 解决移动端屏幕跟着移动的问题 */
+body {
+  overflow: hidden;
 }
