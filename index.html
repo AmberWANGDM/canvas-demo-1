@@ -11,26 +11,50 @@
 </head>
 
 <body>
-  <div id="canvas"></div>
+  <!-- 类似img,可以直接写宽高,但是会被css覆盖 -->
+  <!-- canvas元素宽高是确定好的(默认300*150),如果在css中设置大小,会拉伸导致模糊 -->
+  <!-- 所以需要在一开始就确定好canvas的大小,js可以获取屏幕宽高 -->
+  <canvas id="canvas"></canvas>
   <script>
-    var canvas = document.getElementById('canvas')
-    canvas.onclick = (e) => {
-      console.log(e.clientX)
-      console.log(e.clientY)
 
-      let div = document.createElement('div')
-      div.style.position = 'absolute'
-      div.style.left = e.clientX + 'px'
-      div.style.top = e.clientY + 'px'
-      div.style.border = '1px solid black'
-      div.style.width = '6px'
-      div.style.height = '6px'
-      div.style.marginLeft = '-3px'
-      div.style.marginTop = '-3px'
-      div.style.borderRadius = '50%'
-      div.style.backgroundColor = 'black'
-      canvas.appendChild(div)
+    let canvas = document.getElementById("canvas");
+
+    // 注意body和documentElement的区别, body是由内容撑起来的,documentElement是可视区域
+    canvas.width = document.documentElement.clientWidth
+    canvas.height = document.documentElement.clientHeight
+
+    // 实现按下鼠标作画
+    let painting = false
+
+    canvas.onmousedown = () => {
+      painting = true
     }
+
+    let ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "black";
+    // ctx.strokeStyle = "none";
+    // canvas不会新建DOM节点,解决了卡顿现象
+    canvas.onmousemove = (e) => {
+      // console.log(e.clientX);
+      // console.log(e.clientY);
+      if (painting) {
+        // ctx.fillRect(e.clientX - 3, e.clientY - 3, 6, 6);
+        ctx.beginPath();
+        ctx.arc(e.clientX, e.clientY, 3, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fill()
+      } else {
+        console.log('什么都不做');
+      }
+    }
+
+    // 松开鼠标停止作画
+    canvas.onmouseup = () => {
+      painting = false
+    }
+
+
   </script>
 </body>
 
